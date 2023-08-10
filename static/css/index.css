@@ -68,8 +68,15 @@ button {
 }
 
 .logo {
-    max-width: 21%;
+    max-width: 50%;
     margin: 0 auto;
+}
+
+.logo h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 8rem;
+    font-weight: 200;
+    text-align: center;
 }
 
 .search img {
@@ -78,13 +85,13 @@ button {
 }
 
 .search input {
-    width: 570px;
-    border: 1px solid #D8D8D8;
+    width: 40%;
+    height: 85px;
+    border: none;
     padding: 5px;
-    font-size: 11pt;
-    /* background: url('images/microphone.png') no-repeat;
-    background-position: right;
-    background-size: 4.25%;*/
+    font-size: 50px;
+    text-align: center;
+    
 }
 
 .search-bar {
@@ -93,20 +100,18 @@ button {
 
 .search input:focus {
     outline: none;
-    border: 1px solid #4285F4;
+    border: none;
 }
 
 .search button {
     margin: 14px 7px 0 5px;
     padding: 7px 8px;
-    border-radius: 2px;
-    border: 1px solid #D0D0D0;
-    color: #444444;
-    background-image: -moz-linear-gradient(top, #F5F5F5 0%, #F0F0F0 100%);
-    background-image: -o-linear-gradient(top, #F5F5F5 0%, #F0F0F0 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #F5F5F5), color-stop(1, #F0F0F0));
-    background-image: -webkit-linear-gradient(top, #F5F5F5 0%, #F0F0F0 100%);
-    background-image: linear-gradient(to bottom, #F5F5F5 0%, #F0F0F0 100%);
+    width: 40%;
+    height: 50px;
+    background-color: transparent;
+    border: 1px solid #000;
+    border-radius: 100px;
+
 }
 
 .search button:hover {
@@ -114,6 +119,9 @@ button {
 }
 
 /* End of Search */
+
+
+
 /* Footer */
 footer {
     position: fixed;
