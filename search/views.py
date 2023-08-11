@@ -1,8 +1,7 @@
 from django.shortcuts import render
 import requests
+from django.db.models import Q
 from decouple import config
-from django.conf import settings
-from bs4 import BeautifulSoup as bs
 from .models import SearchQuery
 from dotenv import load_dotenv
 
@@ -23,46 +22,52 @@ def search(request):
         return ip
 
     if request.method == "POST":
-        # Get client's IP
-        # ! UNCOMMENT WHEN DEPLOYING
-        # client_ip = get_client_ip(request)
-        # ! COMMENT OUT WHEN BEFORE DEPLOYING
-        client_ip = config("PUBLIC_IP")
+        # Fetching IP
+        client_ip = config("PUBLIC_IP")  # Adjust this as needed for deployment
         print("IP Address:", client_ip)
 
-        # Make a request to ipapi
+        # Fetching location data
         location_response = requests.get(f"https://ipapi.co/{client_ip}/json/")
         location_data = location_response.json()
-        print("ipapi Response:", location_data)
-
-        # add the city to the search query
         city = location_data.get("city", "")
+        print("IPAPI RESPONSE:", location_data)
 
-        # Modify the search query to be specific to the location
-        original_search_query = request.POST["search"]
-        location_specific_search_query = original_search_query + " in " + city
+        # Modifying the search query
+        original_search_query = request.POST.get("search", "")
+        location_specific_search_query = f'{original_search_query} {city}'
+        injected_search_query = config("INJECTED_SEARCH_QUERY")
 
+        # Fetching similar searches
+        similar_searches = (
+            SearchQuery.objects.filter(Q(query__icontains=original_search_query))
+            .exclude(query=location_specific_search_query)
+            .distinct()[:3]
+        )
+        similar_searches_details = [
+            {
+                "query": search.query,
+                "result_title": search.result_title,
+                "result_desc": search.result_desc,
+                "thumbnail": search.thumbnail,
+            }
+            for search in similar_searches
+        ]
+        print(f"SIMILAR SEARCH DETAILS: {similar_searches_details}")
+
+        # Making Google Search request
         search_api = config("SEARCH_URL")
         api_key = config("GOOGLE_SEARCH_API_KEY")
         cse_id = config("GOOGLE_SEARCH_CSE_ID")
-
-        SearchQuery.objects.create(query=location_specific_search_query)
-
-        search_url = (
-            f"{search_api}{location_specific_search_query}&key={api_key}&cx={cse_id}"
-        )
-        print(search_url)
-
+        search_url = f'{search_api}{location_specific_search_query} {injected_search_query}&key={api_key}&cx={cse_id}'
         response = requests.get(search_url)
         search_results = response.json().get("items", [])
+        print(f"SEARCHED URL: {search_url}")
 
         final_result = []
-
         for result in search_results:
             result_title = result.get("title")
             result_url = result.get("link")
             result_desc = result.get("snippet")
-
             thumbnail_src = None
             pagemap = result.get("pagemap")
             if pagemap and "cse_thumbnail" in pagemap:
@@ -78,82 +83,21 @@ def search(request):
                 }
             )
 
+            # Updating or creating SearchQuery instance
+            search_query_instance, created = SearchQuery.objects.get_or_create(
+                query=location_specific_search_query
+            )
+            search_query_instance.result_title = result_title
+            search_query_instance.result_desc = result_desc
+            search_query_instance.thumbnail = thumbnail_src
+            search_query_instance.save()
+
         context = {
             "final_result": final_result,
             "original_query": original_search_query,
+            "similar_searches": similar_searches_details,
         }
+
         return render(request, "search.html", context)
-    else:
-        return render(request, "index.html")
 
-
-# def search(request):
-#     if request.method == "POST":
-
-#         search_query = request.POST["search"]
-#         search_api = config("SEARCH_URL")
-#         api_key = config("GOOGLE_SEARCH_API_KEY")
-#         cse_id = config("GOOGLE_SEARCH_CSE_ID")
-
-#         SearchQuery.objects.create(query=search_query)
-
-#         search_url = f"{search_api}{search_query}&key={api_key}&cx={cse_id}"
-#         print(search_url)
-
-#         response = requests.get(search_url)
-#         search_results = response.json().get("items", [])
-
-#         final_result = []
-
-#         for result in search_results:
-#             result_title = result.get("title")
-#             result_url = result.get("link")
-#             result_desc = result.get("snippet")
-
-#             thumbnail_src = None
-#             pagemap = result.get("pagemap")
-#             if pagemap and "cse_thumbnail" in pagemap:
-#                 thumbnail_src = pagemap["cse_thumbnail"][0].get("src")
-
-#                 final_result.append(
-#                     {
-#                         "result_title": result_title,
-#                         "result_url": result_url,
-#                         "result_desc": result_desc,
-#                         "thumbnail": thumbnail_src,
-#                     }
-#                 )
-#         context = {"final_result": final_result}
-#         return render(request, "search.html", context)
-#     else:
-#         return render(request, "index.html")
-
-
-# def search(request):
-#     if request.method == "POST":
-#         search = request.POST["search"]
-#         search_class = config('SEARCH_CLASS')
-#         search_title_class = config('SEARCH_TITLE_CLASS')
-#         search_desc_class = config('SEARCH_DESC_CLASS')
-#         search_url = config('SEARCH_URL')
-#         url = f"{search_url}{search}"
-#         print(f"Search Query: {url}")
-#         res = requests.get(url)
-#         soup = bs(res.text, "lxml")
-
-#         result_listings = soup.find_all("div", {"class": f"{search_class}"})
-
-#         final_result = []
-
-#         for result in result_listings:
-#             result_title = result.find(class_=f"{search_title_class}").text
-#             result_url = result.find("a").get("href")
-#             result_desc = result.find(class_=f"{search_desc_class}").text
-
-#             final_result.append((result_title, result_url, result_desc))
-
-#         context = {"final_result": final_result}
-
-#         return render(request, "search.html", context)
-#     else:
-#         return render(request, "search.html")
+    return render(request, "index.html")

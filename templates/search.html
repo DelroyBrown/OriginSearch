@@ -1,8 +1,6 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}" />
-<div
-  class="axil-post-list-area post-listview-visible-color axil-section-gap bg-color-white is-active"
->
+<div class="axil-post-list-area axil-section-gap bg-color-white is-active">
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-xl-8">
@@ -53,7 +51,11 @@
               <div class="post-meta">
                 <div class="content">
                   <h6 class="post-author-name">
-                    <a class="hover-flip-item-wrapper" href="{{ result.result_url }}" target="_blank">
+                    <a
+                      class="hover-flip-item-wrapper"
+                      href="{{ result.result_url }}"
+                      target="_blank"
+                    >
                       <span class="hover-flip-item">
                         <!-- <span data-text="{{ result.result_desc }}">{{ result.result_desc }}</span> -->
                         <p>{{ result.result_desc }}</p>
@@ -107,33 +109,35 @@
 
           <!-- Start Single Widget  -->
           <div class="axil-single-widget widget widget_postlist mb--30">
-            <h5 class="widget-title">Similar searches</h5>
+            <h5 class="widget-title">Recent searches</h5>
             <!-- Start Post List  -->
             <div class="post-medium-block">
               <!-- Start Single Post  -->
-              {% for result in final_result|slice:":3" %}
+              {% for search in similar_searches %}
 
               <div class="content-block post-medium mb--20">
                 <div class="post-thumbnail">
-                  <a href="{{result.result_url}}">
+                  <a href="/">
                     {% if result.thumbnail %}
                     <img
-                      src="{{ result.thumbnail }}"
-                      alt="{{ result.result_title }}"
+                      src="{{ search.thumbnail }}"
+                      alt="{{ search.result_title }}"
                     />
                     {% else %}
                     <img
                       src="{% static 'images/no_image.png' %}"
-                      alt="{{ result.result_title }}"
+                      alt="{{ search.result_title }}"
                     />
                     {% endif %}
                   </a>
                 </div>
                 <div class="post-content">
                   <h6 class="title">
-                    <a href="post-details.html">{{ result.result_title|truncatechars:50 }}</a>
+                    <a href="/">{{ search.result_title|truncatechars:50 }}</a>
                   </h6>
-                  <p style="line-height: 20px; font-size: 13px;">{{ result.result_desc|truncatechars:20 }}</p>
+                  <p style="line-height: 20px; font-size: 13px">
+                    {{ search.result_desc|truncatechars:20 }}
+                  </p>
                   <!-- <div class="post-meta">
                      <ul class="post-meta-list">
                         <a href="{{ result.result_url }}">{{ result.result_url }}</a>
