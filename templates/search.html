@@ -1,245 +1,41 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}" />
-<div class="axil-post-list-area axil-section-gap bg-color-white is-active">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-xl-8">
-        <!-- Start Post List  -->
-        {% for result in final_result %}
 
-        <div class="content-block post-list-view mt--30 axil-control">
-          <div class="post-thumbnail">
-            <a href="{{ result.result_url }}">
-              {% if result.thumbnail %}
-              <img
-                src="{{ result.thumbnail }}"
-                alt="{{ result.result_title }}"
-              />
-              {% else %}
-              <img
-                src="{% static 'images/no_image.png' %}"
-                alt="{{ result.result_title }}"
-              />
-              {% endif %}
-            </a>
-          </div>
-          <div class="post-content">
-            <div class="post-cat">
-              <div class="post-cat-list">
-                <!-- ! Have this connect to something -->
-                <a
-                  class="hover-flip-item-wrapper"
-                  href="{{ result.result_url }}"
-                >
-                  <span class="hover-flip-item">
-                    {% if original_query %}
-                    <span data-text="{{ original_query }}"
-                      >{{ original_query }}</span
-                    >
-                    {% endif %}
-                  </span>
-                </a>
-                <!-- ! Have this connect to something -->
-              </div>
-            </div>
-            <h4 class="title">
-              <a href="{{ result.result_url }}" targez
-                >{{ result.result_title }}</a
-              >
-            </h4>
-            <div class="post-meta-wrapper">
-              <div class="post-meta">
-                <div class="content">
-                  <h6 class="post-author-name">
-                    <a
-                      class="hover-flip-item-wrapper"
-                      href="{{ result.result_url }}"
-                      target="_blank"
-                    >
-                      <span class="hover-flip-item">
-                        <!-- <span data-text="{{ result.result_desc }}">{{ result.result_desc }}</span> -->
-                        <p>{{ result.result_desc }}</p>
-                      </span>
-                    </a>
-                  </h6>
-                  <ul class="post-meta-list">
-                    <a href="{{ result.result_url }}"
-                      >{{ result.result_url }}</a
-                    >
-                  </ul>
-                </div>
-              </div>
-              <ul class="social-share-transparent justify-content-end">
-                <li>
-                  <a href="#"><i class="fab fa-facebook-f"></i></a>
-                </li>
-                <li>
-                  <a href="#"><i class="fab fa-instagram"></i></a>
-                </li>
-                <li>
-                  <a href="#"><i class="fab fa-twitter"></i></a>
-                </li>
-                <li>
-                  <a href="#"><i class="fas fa-link"></i></a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
+<section class="search-result-search-box">{% include "index.html" %}</section>
+<section class="searched-results">
+  <div class="container searched-results-container">
+    <small><b>PAGES FOUND:</b> {{total_results_count}}</small>
+    {% for result in final_result %}
 
-        <!-- End Post List  -->
+    <div class="result-box">
+      {% if result.thumbnail %}
+      <img class="result-image" src="{{ result.thumbnail }}" />
+      {% else %}
+      <img
+        class="result-image"
+        src="{% static 'images/no_image.png' %}"
+        alt="{{result.result_title}}"
+        />
+        {% endif %}
+        <div class="result-info">
+        {% if result.result_date %}
+        <small class="result-date">{{ result.result_date }}</small>
+        {% endif %}
+        <a href="{{result.result_url}}" target="_blank"
+          ><h1>{{result.result_title}}</h1></a
+        >
+        <p>{{ result.result_desc }}</p>
+        <a href="{{result.result_url}}" target="_blank">
+          <small>{{result.display_link}}</small> </a
+        ><br />
       </div>
-      <div class="col-lg-4 col-xl-4 mt_md--40 mt_sm--40">
-        <!-- Start Sidebar Area  -->
-        <div class="sidebar-inner">
-          <!-- Start Single Widget  -->
-          <div class="axil-single-widget widget widget_search mb--30">
-            <h5 class="widget-title">Search</h5>
-            <form action="#">
-              <div class="axil-search form-group">
-                <button type="submit" class="search-button">
-                  <i class="fal fa-search"></i>
-                </button>
-                <input type="text" class="form-control" placeholder="Search" />
-              </div>
-            </form>
-          </div>
-          <!-- End Single Widget  -->
-
-          <!-- Start Single Widget  -->
-          <div class="axil-single-widget widget widget_postlist mb--30">
-            <h5 class="widget-title">Recent searches</h5>
-            <!-- Start Post List  -->
-            <div class="post-medium-block">
-              <!-- Start Single Post  -->
-              {% for search in similar_searches %}
-
-              <div class="content-block post-medium mb--20">
-                <div class="post-thumbnail">
-                  <a href="/">
-                    {% if result.thumbnail %}
-                    <img
-                      src="{{ search.thumbnail }}"
-                      alt="{{ search.result_title }}"
-                    />
-                    {% else %}
-                    <img
-                      src="{% static 'images/no_image.png' %}"
-                      alt="{{ search.result_title }}"
-                    />
-                    {% endif %}
-                  </a>
-                </div>
-                <div class="post-content">
-                  <h6 class="title">
-                    <a href="/">{{ search.result_title|truncatechars:50 }}</a>
-                  </h6>
-                  <p style="line-height: 20px; font-size: 13px">
-                    {{ search.result_desc|truncatechars:20 }}
-                  </p>
-                  <!-- <div class="post-meta">
-                     <ul class="post-meta-list">
-                        <a href="{{ result.result_url }}">{{ result.result_url }}</a>
-                      </ul>
-                  </div> -->
-                </div>
-              </div>
-              {% endfor %}
-
-              <!-- End Single Post  -->
-            </div>
-            <!-- End Post List  -->
-          </div>
-          <!-- End Single Widget  -->
-
-          <!-- Start Single Widget  -->
-          <div class="axil-single-widget widget widget_social mb--30">
-            <h5 class="widget-title">Stay In Touch</h5>
-            <!-- Start Post List  -->
-            <ul class="social-icon md-size justify-content-center">
-              <li>
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-              </li>
-              <li>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-              </li>
-              <li>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-              </li>
-              <li>
-                <a href="#"><i class="fab fa-slack"></i></a>
-              </li>
-              <li>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-              </li>
-            </ul>
-            <!-- End Post List  -->
-          </div>
-          <!-- End Single Widget  -->
-
-          <!-- Start Single Widget  -->
-          <div class="axil-single-widget widget widget_instagram mb--30">
-            <h5 class="widget-title">Instagram</h5>
-            <!-- Start Post List  -->
-            <ul class="instagram-post-list-wrapper">
-              <li class="instagram-post-list">
-                <a href="#">
-                  <img
-                    src="assets/images/small-images/instagram-01.jpg"
-                    alt="Instagram Images"
-                  />
-                </a>
-              </li>
-              <li class="instagram-post-list">
-                <a href="#">
-                  <img
-                    src="assets/images/small-images/instagram-02.jpg"
-                    alt="Instagram Images"
-                  />
-                </a>
-              </li>
-              <li class="instagram-post-list">
-                <a href="#">
-                  <img
-                    src="assets/images/small-images/instagram-03.jpg"
-                    alt="Instagram Images"
-                  />
-                </a>
-              </li>
-              <li class="instagram-post-list">
-                <a href="#">
-                  <img
-                    src="assets/images/small-images/instagram-04.jpg"
-                    alt="Instagram Images"
-                  />
-                </a>
-              </li>
-              <li class="instagram-post-list">
-                <a href="#">
-                  <img
-                    src="assets/images/small-images/instagram-05.jpg"
-                    alt="Instagram Images"
-                  />
-                </a>
-              </li>
-              <li class="instagram-post-list">
-                <a href="#">
-                  <img
-                    src="assets/images/small-images/instagram-06.jpg"
-                    alt="Instagram Images"
-                  />
-                </a>
-              </li>
-            </ul>
-            <!-- End Post List  -->
-          </div>
-          <!-- End Single Widget  -->
-        </div>
-        <!-- End Sidebar Area  -->
-      </div>
+      <div class="result-social-links" style="border: 1px solid red"></div>
     </div>
-  </div>
-</div>
 
+    {% endfor %}
+  </div>
+</section>
+
+
+<script src="{% static 'javascript/search.js' %}"></script>
 {% endblock content %}
