@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}" />
+
+<section class="search-result-search-box">
+  {% include "includes/search-form.html" %}
+</section>
+<section class="searched-results">
+  <div class="container searched-results-container">
+    <small><b>PAGES FOUND:</b> {{total_results_count}}</small>
+    {% for result in final_result %}
+
+    <div class="result-box">
+      {% if result.thumbnail %}
+      <img class="result-image" src="{{ result.thumbnail }}" />
+      {% else %}
+      <img
+        class="result-image"
+        src="{% static 'images/no_image.png' %}"
+        alt="{{result.result_title}}"
+        />
+        {% endif %}
+        <div class="result-info">
+        {% if result.result_date %}
+        <small class="result-date">{{ result.result_date }}</small>
+        {% endif %}
+        <a href="{{result.result_url}}" target="_blank"
+          ><h1>{{result.result_title}}</h1></a
+        >
+        <p>{{ result.result_desc }}</p>
+        <a href="{{result.result_url}}" target="_blank">
+          <small>{{result.display_link}}</small> </a
+        ><br />
+      </div>
+      <div class="result-social-links" style="border: 1px solid red"></div>
+    </div>
+
+    {% endfor %}
+  </div>
+</section>
+
+
+<script src="{% static 'javascript/search.js' %}"></script>
+{% endblock content %}

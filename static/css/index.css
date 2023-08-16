@@ -27,11 +27,13 @@ body {
 
 .search-bar {
     border: none;
+    background-color: transparent;
     width: 35%;
     height: 50px;
     padding: 0px 10px;
     font-size: 30px;
     text-align: center;
+
 }
 
 .search-button button {
@@ -44,11 +46,19 @@ body {
     margin-top: 25px;
 }
 
-.search form {
+/* .search form {
     margin-bottom: 100px;
-}
+} */
+
 input:focus {
     outline: none;
+}
+
+.homepage-blurb {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: black;
+    color: #fff;
 }
 
 @media (max-width: 768px) {

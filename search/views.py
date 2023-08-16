@@ -7,12 +7,19 @@ from django.core.paginator import Paginator, EmptyPage
 from django.conf import settings
 from .models import SearchQuery
 from dotenv import load_dotenv
+from .models import ArticlePosts
 
 load_dotenv()
 
 
 def index(request):
-    return render(request, "index.html")
+    article_posts = ArticlePosts.objects.all()
+
+    context = {
+        'article_posts' : article_posts,
+    }
+
+    return render(request, "index.html",  context)
 
 
 def search(request):
@@ -27,7 +34,8 @@ def search(request):
     print("GET method called!")
     if request.method == "POST":
         # Fetching IP
-        client_ip = get_client_ip(request)  # Adjusted to use the inner function
+        # client_ip = get_client_ip(request)  # ! uncomment when deploying
+        client_ip = config("PUBLIC_IP")
         print("IP Address:", client_ip)
 
         # Fetching location data
@@ -83,21 +91,23 @@ def search(request):
             mime_type = result.get("mime", None)
             file_format = result.get("fileFormat", None)
 
-
             thumbnail_src = None
             pagemap = result.get("pagemap")
             if pagemap and "cse_thumbnail" in pagemap:
                 thumbnail_src = pagemap["cse_thumbnail"][0].get("src")
 
-
             # Extract date from result_desc
-            date_pattern = re.compile(r'([A-Za-z]{3} \d{1,2}, \d{4})')  # This pattern matches "Feb 15, 2023"
+            date_pattern = re.compile(
+                r"([A-Za-z]{3} \d{1,2}, \d{4})"
+            )  # This pattern matches "Feb 15, 2023"
             match = date_pattern.search(result_desc)
-            result_date = match.group() if match else None  # Stores the date if found, else None
+            result_date = (
+                match.group() if match else None
+            )  # Stores the date if found, else None
 
             # Remove the date from the result_desc
             if result_date:
-                result_desc = result_desc.replace(result_date, '').strip()
+                result_desc = result_desc.replace(result_date, "").strip()
             result_desc = result_desc.strip("...").strip()
 
             final_result.append(
@@ -111,7 +121,7 @@ def search(request):
                     "mime_type": mime_type,
                     "file_format": file_format,
                     "original_query": original_search_query,
-                    "result_date": result_date
+                    "result_date": result_date,
                 }
             )
 

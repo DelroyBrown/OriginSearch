@@ -5,14 +5,16 @@ body {
 
 a {
     text-decoration: none !important;
-    color: goldenrod !important;
+    color: black !important;
     font-weight: 600;
 }
 
 .search-result-search-box {
-    border-bottom: 4px solid black;
+    border-bottom: 1px solid black;
     width: 100%;
     margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
 }
 
 .result-box {
@@ -23,10 +25,15 @@ a {
     align-items: center;
     margin: 25px 0px;
     padding: 10px;
-    border-left: 4px solid goldenrod;
-    border-right: 4px solid goldenrod;
+    border-left: 4px solid #e4e4e4;
+    border-right: 4px solid #e4e4e4;
     /* border-radius: 16px; */
     box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+}
+
+.result-box:hover {
+    box-shadow: none;
 }
 
 .result-info {
@@ -48,8 +55,20 @@ a {
 }
 
 .result-date {
-    color: goldenrod !important;
+    color: black !important;
     /* font-weight: 400; */
+}
+
+body > section.search-result-search-box > form {
+    text-align: center;
+}
+
+body > section.search-result-search-box > form > div > button {
+    width: 100%;
+}
+
+.search-result-search-box button {
+    width: 100%;
 }
 
 @media (max-width: 768px) {

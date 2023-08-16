@@ -1,41 +1,542 @@
-{% extends "base.html" %} {% load static %} {% block content %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}" />
+{% extends "base.html" %}
+{% load static %}
 
-<section class="search-result-search-box">{% include "index.html" %}</section>
-<section class="searched-results">
-  <div class="container searched-results-container">
-    <small><b>PAGES FOUND:</b> {{total_results_count}}</small>
-    {% for result in final_result %}
-
-    <div class="result-box">
-      {% if result.thumbnail %}
-      <img class="result-image" src="{{ result.thumbnail }}" />
-      {% else %}
-      <img
-        class="result-image"
-        src="{% static 'images/no_image.png' %}"
-        alt="{{result.result_title}}"
-        />
-        {% endif %}
-        <div class="result-info">
-        {% if result.result_date %}
-        <small class="result-date">{{ result.result_date }}</small>
-        {% endif %}
-        <a href="{{result.result_url}}" target="_blank"
-          ><h1>{{result.result_title}}</h1></a
-        >
-        <p>{{ result.result_desc }}</p>
-        <a href="{{result.result_url}}" target="_blank">
-          <small>{{result.display_link}}</small> </a
-        ><br />
+{% block content %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500&family=Roboto:wght@100;300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/test.css' %}">
+   <!-- TOP NAV -->
+   <div class="nc-HeaderLogged sticky top-0 w-full z-40">
+    <div
+      class="nc-MainNav2Logged relative z-10 bg-white dark:bg-neutral-900 border-b border-slate-100 dark:border-slate-700"
+    >
+      <div class="container">
+        <div class="h-20 flex justify-between">
+          <div class="flex items-center lg:hidden flex-1">
+            <div>
+              <button
+                class="p-2.5 rounded-lg text-neutral-700 dark:text-neutral-300 focus:outline-none flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-7 w-7"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="lg:flex-1 flex items-center">
+            <a class="inline-block flex-shrink-0" href="/">
+              <!-- <svg
+                width="59"
+                height="41"
+                viewBox="0 0 59 41"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M33.5224 9.69455C34.547 8.66632 35.1818 7.24829 35.1818 5.68181C35.1818 2.54402 32.6378 0 29.5 0C27.516 0 25.7721 1.01857 24.7559 2.55971C24.4868 2.83004 1.8706 30.7044 1.65941 31.0255C0.633591 32.0525 0 33.4705 0 35.037C0 38.1748 2.54281 40.7188 5.6806 40.7188C7.66464 40.7188 9.40853 39.7002 10.4247 38.1591C10.695 37.8888 33.3112 10.0144 33.5224 9.69455Z"
+                  fill="currentColor"
+                ></path>
+                <path
+                  d="M46.6081 22.9203C47.6363 21.8921 48.2723 20.4728 48.2723 18.904C48.2723 15.7662 45.7283 13.2221 42.5905 13.2221C40.6065 13.2221 38.8614 14.2419 37.8452 15.7831C37.5737 16.0558 25.6948 30.6972 25.4824 31.0206C24.4541 32.0489 23.8193 33.4681 23.8193 35.037C23.8193 38.1748 26.3621 40.7188 29.4999 40.7188C31.484 40.7188 33.2291 39.699 34.2452 38.1579C34.5168 37.8851 46.3957 23.2437 46.6081 22.9203Z"
+                  fill="currentColor"
+                ></path>
+                <path
+                  d="M59.0001 5.68181C59.0001 8.81959 56.4573 11.3636 53.3195 11.3636C50.1817 11.3636 47.6377 8.81959 47.6377 5.68181C47.6377 2.54402 50.1817 0 53.3195 0C56.4573 0 59.0001 2.54402 59.0001 5.68181Z"
+                  fill="currentColor"
+                ></path>
+                <path
+                  d="M11.3624 5.68181C11.3624 8.81959 8.81838 11.3636 5.6806 11.3636C2.54281 11.3636 0 8.81959 0 5.68181C0 2.54402 2.54281 0 5.6806 0C8.81838 0 11.3624 2.54402 11.3624 5.68181Z"
+                  fill="currentColor"
+                ></path>
+              </svg> -->
+           <span class="logo-text">OS</span>
+            </a>
+          </div>
+          <div class="flex-[2] hidden lg:flex justify-center mx-4">
+            <ul class="nc-Navigation items-center flex">
+            
+            
+            </ul>
+          </div>
+          <div
+            class="flex-1 flex items-center justify-end text-slate-700 dark:text-slate-100"
+          >
+            <div class="relative" data-headlessui-state="">
+              <button
+                class="w-10 h-10 sm:w-12 sm:h-12 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center"
+                type="button"
+                aria-expanded="false"
+                data-headlessui-state=""
+                id="headlessui-popover-button-:Rniba:"
+              >
+                <!-- <svg
+                  class="w-6 h-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                  <path
+                    d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg> -->
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="result-social-links" style="border: 1px solid red"></div>
     </div>
-
-    {% endfor %}
   </div>
-</section>
+  <!-- TOP NAV -->
+
+  <div class="nc-PageSearch">
+    <div class="w-screen px-2 xl:max-w-screen-2xl mx-auto">
+      <div
+        class="rounded-3xl md:rounded-[40px] relative aspect-w-16 aspect-h-9 lg:aspect-h-5 overflow-hidden z-0"
+      >
+        <div class="absolute inset-0">
+          <!-- <img
+            alt="search"
+            loading="lazy"
+            decoding="async"
+            data-nimg="fill"
+            class="object-cover w-full h-full"
+            sizes="(max-width: 1280px) 100vw, 1536px"
+            src="/static/images/searchboxbg.png"
+          /> -->
+          <div class="flex justify-center homepage-title">
+            <h1>OriginSearch</h1>
+            <p>BLACK OWNED SEARCH ENGINE</p>
+          </div>
+        </div>
+      </div>
+      <div class="relative container -mt-20 lg:-mt-48">
+        <div
+          class="bg-white dark:bg-neutral-900 dark:border dark:border-neutral-700 p-5 lg:p-16 rounded-[40px] shadow-2xl flex items-center"
+        >
+          <header
+            class="w-full max-w-3xl mx-auto text-center flex flex-col items-center"
+          >
+            <h2 class="text-2xl sm:text-4xl font-semibold">OriginSearch</h2>
+            <span
+              class="block text-xs sm:text-sm mt-4 text-neutral-500 dark:text-neutral-300"
+            >
+              We found
+              <strong
+                class="font-medium text-neutral-800 dark:text-neutral-100"
+                >{{total_results_count}}
+              </strong>
+              results for
+              <strong
+                class="font-medium text-neutral-800 dark:text-neutral-100"
+                >{{original_query}}
+              </strong>
+            </span>
+            <form
+              class="relative w-full mt-8 sm:mt-11 text-left"
+              method="POST" action="search"
+            >
+            {% csrf_token %}
+              <label
+                for="search-input"
+                class="text-neutral-500 dark:text-neutral-300"
+              >
+                <input
+                  class="block w-full border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200/50 bg-white dark:border-neutral-500 dark:focus:ring-primary-500/30 dark:bg-neutral-900 rounded-full text-sm font-normal pl-14 py-5 pe-5 md:ps-16"
+                  type="text" name="search" autofocus
+                />
+                <button
+                  class="ttnc-ButtonCircle flex items-center justify-center rounded-full !leading-none disabled:bg-opacity-70 bg-slate-900 hover:bg-slate-800 text-slate-50 absolute end-2.5 top-1/2 transform -translate-y-1/2 w-11 h-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
+                  type="submit"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    class="w-5 h-5 rtl:rotate-180"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M12.97 3.97a.75.75 0 011.06 0l7.5 7.5a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 11-1.06-1.06l6.22-6.22H3a.75.75 0 010-1.5h16.19l-6.22-6.22a.75.75 0 010-1.06z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                </button>
+                <span
+                  class="absolute start-5 top-1/2 transform -translate-y-1/2 text-2xl md:start-6"
+                >
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                      d="M19.25 19.25L15.5 15.5M4.75 11C4.75 7.54822 7.54822 4.75 11 4.75C14.4518 4.75 17.25 7.54822 17.25 11C17.25 14.4518 14.4518 17.25 11 17.25C7.54822 17.25 4.75 14.4518 4.75 11Z"
+                    ></path>
+                  </svg>
+                </span>
+              </label>
+            </form>
+            <div
+              class="w-full text-sm text-start mt-4 text-neutral-500 dark:text-neutral-300"
+            >
+              <div
+                class="inline-block space-x-1.5 sm:space-x-2.5 rtl:space-x-reverse"
+              >
+                <span class="">Related: </span>
+                {% for search in similar_searches  %}
+                {% if search.query %}
+                  
+                <a
+                class="nc-NcLink text-primary-6000 hover:text-primary-800 dark:text-primary-500 dark:hover:text-primary-6000 inline-block font-normal"
+                href="/search">
+                {{search.query}}
+              </a>
+              {% else %}
+              
+              {% endif %}
+              {% endfor %}
+               
+              </div>
+            </div>
+          </header>
+        </div>
+      </div>
+    </div>
+    <div class="container py-16 lg:pb-28 lg:pt-20 space-y-16 lg:space-y-28">
+      <!--  -->
+      <main>
+        <div
+          class="flex flex-col sm:items-center sm:justify-between sm:flex-row"
+        >
+          <!-- NAV UNDERNEATH SEARCH BOX -->
+          <nav
+            class="nc-Nav w-full overflow-x-auto hiddenScrollbar"
+            data-nc-id="Nav"
+          >
+            <ul class="flex sm:space-x-2 rtl:space-x-reverse">
+              <li class="nc-NavItem relative flex-shrink-0">
+                <button
+                  class="flex items-center justify-center font-medium px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full bg-neutral-900 text-neutral-50 dark:bg-neutral-100 dark:text-black"
+                >
+                  Articles
+                </button>
+              </li>
+              <li class="nc-NavItem relative flex-shrink-0">
+                <button
+                  class="flex items-center justify-center font-medium px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-100 hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                >
+                  Categories
+                </button>
+              </li>
+              <li class="nc-NavItem relative flex-shrink-0">
+                <button
+                  class="flex items-center justify-center font-medium px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-100 hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                >
+                  Tags
+                </button>
+              </li>
+              <li class="nc-NavItem relative flex-shrink-0">
+                <button
+                  class="flex items-center justify-center font-medium px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-100 hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                >
+                  Authors
+                </button>
+              </li>
+            </ul>
+          </nav>
+          <!-- NAV UNDERNEATH SEARCH BOX -->
 
 
-<script src="{% static 'javascript/search.js' %}"></script>
+          <!-- POSTS TO BLACK BUSINESS SEARCHES -->
+          <div
+            class="block my-4 border-b w-full border-neutral-300 dark:border-neutral-500 sm:hidden"
+          ></div>
+          <div class="flex justify-end">
+            <div class="nc-ArchiveFilterListBox flex-shrink-0">
+              <div class="relative">
+                <div
+                  id="headlessui-listbox-button-:r5o:"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                  data-headlessui-state=""
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-8 mt-8 lg:mt-10">
+          
+          <!-- POST CARD -->
+    {% for result in final_result %}
+          <div
+            class="nc-Card11 relative flex flex-col group rounded-3xl overflow-hidden bg-white dark:bg-neutral-900 h-full"
+          >
+            <div
+              class="block flex-shrink-0 relative w-full rounded-t-3xl overflow-hidden z-10 aspect-w-4 aspect-h-3"
+            >
+              <div>
+                <div class="nc-PostFeaturedMedia relative w-full h-full">
+                  <img
+                    alt="featured"
+                    loading="lazy"
+                    decoding="async"
+                    data-nimg="fill"
+                    class="object-cover"
+                    sizes="(max-width: 600px) 480px, 800px"
+                    src="{{result.thumbnail}}"
+                    style="
+                      position: absolute;
+                      height: 100%;
+                      width: 100%;
+                      inset: 0px;
+                      color: transparent;
+                    "
+                  />
+                  <a
+                    class="block absolute inset-0 bg-black/20 transition-opacity opacity-0 group-hover:opacity-100" target="_blank"
+                    href="{{result.result_url}}"
+                  ></a>
+                </div>
+              </div>
+            </div>
+            <a class="absolute inset-0" href="{{result.result_url}}" target="_blank">
+            </a>
+            <span class="absolute top-3 inset-x-3 z-10">
+              <div
+                class="nc-CategoryBadgeList flex flex-wrap space-x-2"
+                data-nc-id="CategoryBadgeList"
+              >
+                <a
+                  class="transition-colors hover:text-white duration-300 nc-Badge inline-flex px-2.5 py-1 rounded-full font-medium text-xs relative text-yellow-800 bg-yellow-100 hover:bg-yellow-800"
+                  href="/archive/the-demo-archive-slug"
+                  >Industrial
+                </a>
+              </div>
+            </span>
+            <div class="p-4 flex flex-col space-y-3">
+              <div
+                class="nc-PostCardMeta inline-flex items-center flex-wrap text-neutral-800 dark:text-neutral-200 leading-none text-xs"
+              >
+                <a
+                  class="relative flex items-center space-x-2 rtl:space-x-reverse"
+                  href="/author/the-demo-author-slug"
+                >
+                    <span class="wil-avatar__name"><a href="{{result.display_link}}">{{result.display_link}}</a></span>
+               
+                </a>
+                <span
+                  class="text-neutral-500 dark:text-neutral-400 mx-[6px] font-medium"
+                  >
+                </span>
+                {% if result_date %}
+                <span
+                  class="text-neutral-500 dark:text-neutral-400 font-normal"
+                  >{{result.result_date}}
+                </span>
+                {% endif %}
+              </div>
+              <h3
+                class="nc-card-title block text-base font-semibold text-neutral-900 dark:text-neutral-100"
+              >
+                <span
+                  class="line-clamp-2"
+                >
+                  {{result.result_title}}
+                </span>
+              </h3>
+              <div class="flex items-end justify-between mt-auto">
+                <div
+                  class="nc-PostCardLikeAndComment flex items-center space-x-2 rtl:space-x-reverse relative"
+                >
+                  <button
+                    class="nc-PostCardLikeAction relative min-w-[68px] flex items-center rounded-full leading-none group transition-colors px-3 h-8 text-xs text-neutral-700 bg-neutral-50 dark:text-neutral-200 dark:bg-neutral-800 hover:bg-rose-50 dark:hover:bg-rose-100 hover:text-rose-600 dark:hover:text-rose-500"
+                    title="Liked"
+                  >
+                    <svg
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1"
+                        d="M11.995 7.23319C10.5455 5.60999 8.12832 5.17335 6.31215 6.65972C4.49599 8.14609 4.2403 10.6312 5.66654 12.3892L11.995 18.25L18.3235 12.3892C19.7498 10.6312 19.5253 8.13046 17.6779 6.65972C15.8305 5.18899 13.4446 5.60999 11.995 7.23319Z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span class="ml-1 text-neutral-900 dark:text-neutral-200"
+                      >34
+                    </span>
+                  </button>
+                  <a
+                    class="nc-PostCardCommentBtn relative items-center min-w-[68px] rounded-full text-neutral-6000 bg-neutral-50 transition-colors dark:text-neutral-200 dark:bg-neutral-800 hover:bg-teal-50 dark:hover:bg-teal-100 hover:text-teal-600 dark:hover:text-teal-500 hidden sm:flex px-3 h-8 text-xs"
+                    title="Comments"
+                    href="/single/demo-slug#comments"
+                  >
+                    <svg
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1"
+                        d="M4.75 6.75C4.75 5.64543 5.64543 4.75 6.75 4.75H17.25C18.3546 4.75 19.25 5.64543 19.25 6.75V14.25C19.25 15.3546 18.3546 16.25 17.25 16.25H14.625L12 19.25L9.375 16.25H6.75C5.64543 16.25 4.75 15.3546 4.75 14.25V6.75Z"
+                      ></path>
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9.5 11C9.5 11.2761 9.27614 11.5 9 11.5C8.72386 11.5 8.5 11.2761 8.5 11C8.5 10.7239 8.72386 10.5 9 10.5C9.27614 10.5 9.5 10.7239 9.5 11Z"
+                      ></path>
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12.5 11C12.5 11.2761 12.2761 11.5 12 11.5C11.7239 11.5 11.5 11.2761 11.5 11C11.5 10.7239 11.7239 10.5 12 10.5C12.2761 10.5 12.5 10.7239 12.5 11Z"
+                      ></path>
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15.5 11C15.5 11.2761 15.2761 11.5 15 11.5C14.7239 11.5 14.5 11.2761 14.5 11C14.5 10.7239 14.7239 10.5 15 10.5C15.2761 10.5 15.5 10.7239 15.5 11Z"
+                      ></path>
+                    </svg>
+                    <span class="ml-1 text-neutral-900 dark:text-neutral-200"
+                      >110</span
+                    >
+                  </a>
+                </div>
+                <div
+                  class="nc-PostCardSaveAction flex items-center space-x-2 text-xs text-neutral-700 dark:text-neutral-300 relative"
+                >
+                  <button
+                    class="nc-NcBookmark relative rounded-full flex items-center justify-center h-8 w-8 bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-700"
+                    title="Save to reading list"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      fill="none"
+                      stroke="currentColor"
+                      class="w-[18px] h-[18px]"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+          <!--  END POST CARD-->
+      </main>
+
+
+        <!-- TRENDING SEARCHES -->
+      <div class="relative py-16">
+        <div
+          class="absolute inset-y-0 w-screen xl:max-w-[1340px] 2xl:max-w-screen-2xl left-1/2 transform -translate-x-1/2 xl:rounded-[40px] z-0 bg-neutral-100 dark:bg-black dark:bg-opacity-20">
+          <span class="sr-only hidden">bg</span>
+        </div>
+        <div class="nc-SectionGridCategoryBox relative">
+          <div
+            class="nc-Section-Heading relative flex flex-col sm:flex-row sm:items-end justify-between mb-10 md:mb-12 text-neutral-900 dark:text-neutral-50"
+          >
+            <div class="text-center w-full max-w-2xl mx-auto">
+              <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold">
+                Top trending topics
+              </h2>
+              <span
+                class="mt-2 md:mt-3 font-normal block text-base sm:text-xl text-neutral-500 dark:text-neutral-400"
+                >Discover over 100 topics
+              </span>
+            </div>
+          </div>
+          <div
+            class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8"
+          >
+          <!-- CARD -->
+            <a
+              class="nc-CardCategory2 relative flex flex-col items-center justify-center text-center px-3 py-5 sm:p-6 bg-white dark:bg-neutral-900 rounded-3xl transition-colors"
+              href="/archive/the-demo-archive-slug"
+            >
+              <span
+                class="nc-Badge inline-flex px-2.5 py-1 rounded-full font-medium text-xs absolute -top-2 sm:top-3 left-3 text-indigo-800 bg-indigo-100"
+                >#1
+              </span>
+              <div
+                class="relative flex-shrink-0 w-20 h-20 rounded-full shadow-lg overflow-hidden z-0"
+              >
+                <img
+                  alt="categories"
+                  loading="lazy"
+                  decoding="async"
+                  data-nimg="fill"
+                  class="object-cover"
+                  sizes="80px"
+                  src="/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1533090161767-e6ffed986c88%3Fixid%3DMnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8%26ixlib%3Drb-1.2.1%26auto%3Dformat%26fit%3Dcrop%26w%3D550%26q%3D80&amp;w=3840&amp;q=75"
+                  style="
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                    inset: 0px;
+                    color: transparent;
+                  "
+                />
+              </div>
+              <div class="mt-3">
+                <h2 class="text-base font-semibold">Garden</h2>
+                <span
+                  class="block mt-1 text-sm text-neutral-500 dark:text-neutral-400"
+                  >13 Articles
+                </span>
+              </div>
+            </a>
+            <!-- END CARD -->
+           
+            
+          </div>
+        </div>
+      </div>
+      <!-- TRENDING SEARCHES -->
+
+    </div>
+  </div>
 {% endblock content %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+ 
+{% block content %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+
+ <div class="search">
+    <div class="logo">
+       <!-- <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" /> -->
+       <h1>OriginSearch</h1>
+    </div>
+    {% include "includes/search-form.html" %}
+    <!-- <div class="homepage-blurb">
+      <p>
+         <b>Discover Black-Owned Businesses Near You</b><br>
+OriginSearch connects you with local Black-owned businesses that cater to your needs.<br>
+From hairdressers to restaurants and beyond, support community growth one search at a time.<br>
+Start your journey below.
+      </p>
+    </div> -->
+    </div>
+    </div>
+ </div>
+
+{% endblock content %}
