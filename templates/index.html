@@ -138,20 +138,7 @@
             class="w-full max-w-3xl mx-auto text-center flex flex-col items-center"
           >
             <h2 class="text-2xl sm:text-4xl font-semibold">OriginSearch</h2>
-            <span
-              class="block text-xs sm:text-sm mt-4 text-neutral-500 dark:text-neutral-300"
-            >
-              We found
-              <strong
-                class="font-medium text-neutral-800 dark:text-neutral-100"
-                >{{total_results_count}}
-              </strong>
-              results for
-              <strong
-                class="font-medium text-neutral-800 dark:text-neutral-100"
-                >{{original_query}}
-              </strong>
-            </span>
+           
             <form
               class="relative w-full mt-8 sm:mt-11 text-left"
               method="POST" action="search"
@@ -204,19 +191,7 @@
               <div
                 class="inline-block space-x-1.5 sm:space-x-2.5 rtl:space-x-reverse"
               >
-                <span class="">Related: </span>
-                {% for search in similar_searches  %}
-                {% if search.query %}
-                  
-                <a
-                class="nc-NcLink text-primary-6000 hover:text-primary-800 dark:text-primary-500 dark:hover:text-primary-6000 inline-block font-normal"
-                href="/search">
-                {{search.query}}
-              </a>
-              {% else %}
-              
-              {% endif %}
-              {% endfor %}
+                
                
               </div>
             </div>
@@ -270,9 +245,6 @@
           
           <!-- POSTS ABOUT -->
           {% for article_post in article_posts  %}
-          {{article_post.article_title}}
-          {{article_post.article_desc}}
-          {{article_post.article_link}}
           <div
             class="nc-Card11 relative flex flex-col group rounded-3xl overflow-hidden bg-white dark:bg-neutral-900 h-full"
           >
@@ -299,12 +271,12 @@
                   />
                   <a
                     class="block absolute inset-0 bg-black/20 transition-opacity opacity-0 group-hover:opacity-100" target="_blank"
-                    href="{{result.result_url}}"
+                    href="{{article_post.article_link}}"
                   ></a>
                 </div>
               </div>
             </div>
-            <a class="absolute inset-0" href="{{result.result_url}}" target="_blank">
+            <a class="absolute inset-0" href="{{article_post.article_link}}" target="_blank">
             </a>
             <span class="absolute top-3 inset-x-3 z-10">
               <div
@@ -313,7 +285,7 @@
               >
                 <a
                   class="transition-colors hover:text-white duration-300 nc-Badge inline-flex px-2.5 py-1 rounded-full font-medium text-xs relative text-yellow-800 bg-yellow-100 hover:bg-yellow-800"
-                  href="/archive/the-demo-archive-slug"
+                  href="{{article_post.article_link}}"
                   >Industrial
                 </a>
               </div>
@@ -324,7 +296,7 @@
               >
                 <a
                   class="relative flex items-center space-x-2 rtl:space-x-reverse"
-                  href="/author/the-demo-author-slug"
+                  href="{{article_post.article_link}}"
                 >
                     <span class="wil-avatar__name"><a href="{{article_post.article_link}}">{{article_post.article_link}}</a></span>
                
@@ -348,6 +320,8 @@
                 >
                   {{article_post.article_title}}
                 </span>
+                <span style="font-weight: 400; margin-top: 10px;" class="line-clamp-3">{{article_post.article_desc}}</span>
+                
               </h3>
               <div class="flex items-end justify-between mt-auto">
                 <div
@@ -380,7 +354,7 @@
                   <a
                     class="nc-PostCardCommentBtn relative items-center min-w-[68px] rounded-full text-neutral-6000 bg-neutral-50 transition-colors dark:text-neutral-200 dark:bg-neutral-800 hover:bg-teal-50 dark:hover:bg-teal-100 hover:text-teal-600 dark:hover:text-teal-500 hidden sm:flex px-3 h-8 text-xs"
                     title="Comments"
-                    href="/single/demo-slug#comments"
+                    href="{{article_post.article_link}}" target="_blank"
                   >
                     <svg
                       width="24"

@@ -18,7 +18,7 @@ class ArticlePosts(models.Model):
     article_title = models.CharField(
         max_length=200, blank=False, null=False, default=""
     )
-    article_image = models.ImageField(blank=False, null=False, default='')
+    article_image = models.ImageField(blank=False, null=False, default='', upload_to='static/images/article_images')
     article_desc = models.TextField(max_length=500, blank=False, null=False, default="")
     article_link = models.URLField(max_length=500, blank=True, null=True)
 
