@@ -69,6 +69,7 @@ def fetch_google_search_results(injected_search_query, location_specific_search_
     cse_id = config("GOOGLE_SEARCH_CSE_ID")
     search_url = f"{search_api}{injected_search_query} {location_specific_search_query}&key={api_key}&cx={cse_id}"
     response = requests.get(search_url)
+    print(f"ALTERED SEARCH QUERY: {search_url}")
     return response.json()
 
 
