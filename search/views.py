@@ -39,8 +39,9 @@ def get_location_data(client_ip):
 
 
 # Search query modification
-def modify_search_query(original_search_query, city):
-    return f"{original_search_query} {city}"
+def modify_search_query(original_search_query, region):
+    location_specific_search_query = f"{original_search_query} in {region}"
+    return original_search_query, location_specific_search_query
 
 
 # Fetching similar searches
@@ -63,11 +64,12 @@ def fetch_similar_searches(original_search_query, location_specific_search_query
 
 
 # Google search request
-def fetch_google_search_results(injected_search_query, location_specific_search_query):
+def fetch_google_search_results(injected_search_query, original_search_query, region):
     search_api = config("SEARCH_URL")
     api_key = config("GOOGLE_SEARCH_API_KEY")
     cse_id = config("GOOGLE_SEARCH_CSE_ID")
-    search_url = f"{search_api}{injected_search_query} {location_specific_search_query}&key={api_key}&cx={cse_id}"
+    search_url = f'{search_api}{injected_search_query} "{original_search_query}" in {region}&key={api_key}&cx={cse_id}'
+    # search_url = f"{search_api}{injected_search_query} {location_specific_search_query}&key={api_key}&cx={cse_id}"
     response = requests.get(search_url)
     print(f"ALTERED SEARCH QUERY: {search_url}")
     return response.json()
@@ -155,13 +157,12 @@ def search(request):
 
         # Fetching location data
         location_data = get_location_data(client_ip)
-        city = location_data.get("city", "")
+        region = location_data.get("region", "")
         print(f"LOCATION DATA: {location_data}")
 
         # Modifying the search query
-        original_search_query = request.POST.get("search", "")
-        location_specific_search_query = modify_search_query(
-            original_search_query, city
+        original_search_query, location_specific_search_query = modify_search_query(
+            request.POST.get("search", ""), region
         )
 
         # Fetching similar searches
@@ -171,7 +172,7 @@ def search(request):
 
         # Making Google Search request
         search_response = fetch_google_search_results(
-            config("INJECTED_SEARCH_QUERY"), location_specific_search_query
+            config("INJECTED_SEARCH_QUERY"), original_search_query, region
         )
 
         # Processing Search Results
