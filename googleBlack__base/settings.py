@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -61,6 +62,11 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+# DATABASES = {
+#     'default' : dj_database_url.parse('postgres://feghoqoaysuekg:837464445b3c55a92b6fce583f2d736cb29ae424ea6e7215151117507877dd5c@ec2-54-73-22-169.eu-west-1.compute.amazonaws.com:5432/d33clmlidj88rn')
+# }
+
 
 
 AUTH_PASSWORD_VALIDATORS = [
