@@ -38,8 +38,8 @@ def get_location_data(client_ip):
 
 
 # Search query modification
-def modify_search_query(original_search_query, region):
-    location_specific_search_query = f"{original_search_query} in {region}"
+def modify_search_query(original_search_query, country_name):
+    location_specific_search_query = f"{original_search_query} in {country_name}"
     return original_search_query, location_specific_search_query
 
 
@@ -87,11 +87,11 @@ def fetch_similar_searches(original_search_query, location_specific_search_query
 
 
 # Google search request
-def fetch_google_search_results(injected_search_query, original_search_query, region):
+def fetch_google_search_results(injected_search_query, original_search_query, country_name):
     search_api = config("SEARCH_URL")
     api_key = config("GOOGLE_SEARCH_API_KEY")
     cse_id = config("GOOGLE_SEARCH_CSE_ID")
-    search_url = f'{search_api}{injected_search_query} "{original_search_query}" in "{region}"&key={api_key}&cx={cse_id}'
+    search_url = f'{search_api}{injected_search_query} "{original_search_query}" in "{country_name}"&key={api_key}&cx={cse_id}'
     # search_url = f"{search_api}{injected_search_query} {location_specific_search_query}&key={api_key}&cx={cse_id}"
     response = requests.get(search_url)
     print(f"ALTERED SEARCH QUERY: {search_url}")
@@ -183,12 +183,12 @@ def search(request):
 
         # Fetching location data
         location_data = get_location_data(client_ip)
-        region = location_data.get("region", "")
+        country_name = location_data.get("country_name", "")
         print(f"LOCATION DATA: {location_data}")
 
         # Modifying the search query
         original_search_query, location_specific_search_query = modify_search_query(
-            request.POST.get("search", ""), region
+            request.POST.get("search", ""), country_name
         )
 
         # Fetching similar searches
@@ -198,7 +198,7 @@ def search(request):
 
         # Making Google Search request
         search_response = fetch_google_search_results(
-            config("INJECTED_SEARCH_QUERY"), original_search_query, region
+            config("INJECTED_SEARCH_QUERY"), original_search_query, country_name
         )
 
         # Processing Search Results
