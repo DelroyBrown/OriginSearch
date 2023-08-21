@@ -4,7 +4,6 @@ from django.shortcuts import render
 from django.db.models import Q
 from decouple import config
 from django.core.paginator import Paginator, EmptyPage
-from django.conf import settings
 from .models import SearchQuery
 from dotenv import load_dotenv
 from .models import ArticlePosts
@@ -44,6 +43,30 @@ def modify_search_query(original_search_query, region):
     return original_search_query, location_specific_search_query
 
 
+def fetch_unsplash_image(query):
+    UNSPLASH_URL = config("UNSPLASH_URL")
+    UNSPLASH_API_KEY = config("UNSPLASH_API_KEY")
+
+    params = {
+        "query": query,
+        "per_page": 1,
+        "orientation": "landscape",
+    }
+
+    headers = {
+        "Authorization": f"Client-ID {UNSPLASH_API_KEY}",
+    }
+
+    response = requests.get(UNSPLASH_URL, params=params, headers=headers)
+    data = response.json()
+
+    # Extract the image URL from the response
+    image_url = data["results"][0]["urls"]["full"] if data["results"] else None
+    print(f"UNSPLASH IMAGE RETRIEVED: {image_url}")
+
+    return image_url
+
+
 # Fetching similar searches
 def fetch_similar_searches(original_search_query, location_specific_search_query):
     similar_searches = (
@@ -68,7 +91,7 @@ def fetch_google_search_results(injected_search_query, original_search_query, re
     search_api = config("SEARCH_URL")
     api_key = config("GOOGLE_SEARCH_API_KEY")
     cse_id = config("GOOGLE_SEARCH_CSE_ID")
-    search_url = f'{search_api}{injected_search_query} "{original_search_query}" in {region}&key={api_key}&cx={cse_id}'
+    search_url = f'{search_api}{injected_search_query} "{original_search_query}" in "{region}"&key={api_key}&cx={cse_id}'
     # search_url = f"{search_api}{injected_search_query} {location_specific_search_query}&key={api_key}&cx={cse_id}"
     response = requests.get(search_url)
     print(f"ALTERED SEARCH QUERY: {search_url}")
@@ -93,6 +116,9 @@ def process_search_results(
         pagemap = result.get("pagemap")
         if pagemap and "cse_thumbnail" in pagemap:
             thumbnail_src = pagemap["cse_thumbnail"][0].get("src")
+        else:
+            # Fetch a random image from Unsplash based on the search query
+            thumbnail_src = fetch_unsplash_image(original_search_query)
 
         # Extract date from result_desc
         date_pattern = re.compile(
@@ -181,7 +207,7 @@ def search(request):
         )
 
         page = request.GET.get("page", 1)  # Get the page number from request
-        paginator = Paginator(final_result, 10)  # Adjusting to show 10 results per page
+        paginator = Paginator(final_result, 300)
 
         try:
             results_to_show = paginator.page(page)

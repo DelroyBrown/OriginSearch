@@ -107,33 +107,15 @@
 <!-- TOP NAV -->
 <div class="nc-PageSearch">
    <div class="w-screen px-2 xl:max-w-screen-2xl mx-auto">
-      <div
-         class="rounded-3xl md:rounded-[40px] relative aspect-w-16 aspect-h-9 lg:aspect-h-5 overflow-hidden z-0"
-         >
-         <div class="absolute inset-0">
-            <!-- <img
-               alt="search"
-               loading="lazy"
-               decoding="async"
-               data-nimg="fill"
-               class="object-cover w-full h-full"
-               sizes="(max-width: 1280px) 100vw, 1536px"
-               src="/static/images/searchboxbg.png"
-               /> -->
-            <div class="flex justify-center homepage-title">
-               <h1>OriginSearch</h1>
-               <p>BLACK OWNED SEARCH ENGINE</p>
-            </div>
-         </div>
-      </div>
-      <div class="relative container -mt-20 lg:-mt-48">
+    
+      <div class="relative container mt-20 lg:mt-48">
          <div
             class="bg-white dark:bg-neutral-900 dark:border dark:border-neutral-700 p-5 lg:p-16 rounded-[40px] shadow-2xl flex items-center"
             >
             <header
                class="w-full max-w-3xl mx-auto text-center flex flex-col items-center"
                >
-               <h2 class="text-2xl sm:text-4xl font-semibold">OriginSearch</h2>
+               <h2 class="text-2xl sm:text-4xl font-semibold"><span class="brand-text-color">O</span>rigin<span class="brand-text-color">S</span>earch</h2>
                {% if total_results_count %}
                <span class="block text-xs sm:text-sm mt-4 text-neutral-500 dark:text-neutral-300">
                We found <strong class="font-medium text-neutral-800 dark:text-neutral-100">
@@ -234,33 +216,13 @@
             >
             <ul class="flex sm:space-x-2 rtl:space-x-reverse">
                <li class="nc-NavItem relative flex-shrink-0">
-                  <button
-                     class="flex items-center justify-center font-medium px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full bg-neutral-900 text-neutral-50 dark:bg-neutral-100 dark:text-black"
-                     >
-                  Articles
-                  </button>
-               </li>
-               <li class="nc-NavItem relative flex-shrink-0">
-                  <button
-                     class="flex items-center justify-center font-medium px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-100 hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                     >
-                  Categories
-                  </button>
-               </li>
-               <li class="nc-NavItem relative flex-shrink-0">
-                  <button
-                     class="flex items-center justify-center font-medium px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-100 hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                     >
-                  Tags
-                  </button>
-               </li>
-               <li class="nc-NavItem relative flex-shrink-0">
-                  <button
-                     class="flex items-center justify-center font-medium px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-100 hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                     >
-                  Authors
-                  </button>
-               </li>
+                  <h2
+                    class="total-results-text flex items-center justify-center px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 rounded-full"
+                  >
+                  {{original_query}}
+               </h2>
+                </li>
+          
             </ul>
          </nav>
          <!-- NAV UNDERNEATH SEARCH BOX -->
@@ -285,7 +247,7 @@
          <!-- POST CARD -->
          {% for result in final_result %}
          <div
-            class="nc-Card11 relative flex flex-col group rounded-3xl overflow-hidden bg-white dark:bg-neutral-900 h-full"
+            class="shadow-lg nc-Card11 relative flex flex-col group rounded-3xl overflow-hidden bg-white dark:bg-neutral-900 h-full"
             >
             <div
                class="block flex-shrink-0 relative w-full rounded-t-3xl overflow-hidden z-10 aspect-w-4 aspect-h-3"
@@ -322,11 +284,11 @@
                   class="nc-CategoryBadgeList flex flex-wrap space-x-2"
                   data-nc-id="CategoryBadgeList"
                   >
-                  <a
-                     class="transition-colors hover:text-white duration-300 nc-Badge inline-flex px-2.5 py-1 rounded-full font-medium text-xs relative text-yellow-800 bg-yellow-100 hover:bg-yellow-800"
-                     href="/archive/the-demo-archive-slug"
-                     >{{result.result_date}}
-                  </a>
+                  <span
+                  class="nc-Badge article-post-tag inline-flex px-2.5 py-1 rounded-full font-medium text-xs relative"
+                  href="{{article_post.article_link}}"
+                  >{{result.original_query}}
+            </span>
                </div>
             </span>
             <div class="p-4 flex flex-col space-y-3">
@@ -343,12 +305,7 @@
                      class="text-neutral-500 dark:text-neutral-400 mx-[6px] font-medium"
                      >
                   </span>
-                  {% if result_date %}
-                  <span
-                     class="text-neutral-500 dark:text-neutral-400 font-normal"
-                     >{{result.result_date}}
-                  </span>
-                  {% endif %}
+                 
                </div>
                <h3
                   class="nc-card-title block text-base font-semibold text-neutral-900 dark:text-neutral-100"
@@ -359,98 +316,33 @@
                   {{result.result_title}}
                   </span>
                </h3>
+               <p>{{result.result_desc}}</p>
                <div class="flex items-end justify-between mt-auto">
                   <div
                      class="nc-PostCardLikeAndComment flex items-center space-x-2 rtl:space-x-reverse relative"
                      >
-                     <button
-                        class="nc-PostCardLikeAction relative min-w-[68px] flex items-center rounded-full leading-none group transition-colors px-3 h-8 text-xs text-neutral-700 bg-neutral-50 dark:text-neutral-200 dark:bg-neutral-800 hover:bg-rose-50 dark:hover:bg-rose-100 hover:text-rose-600 dark:hover:text-rose-500"
-                        title="Liked"
-                        >
-                        <svg
-                           width="24"
-                           height="24"
-                           fill="none"
-                           viewBox="0 0 24 24"
-                           >
-                           <path
-                              fill-rule="evenodd"
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="1"
-                              d="M11.995 7.23319C10.5455 5.60999 8.12832 5.17335 6.31215 6.65972C4.49599 8.14609 4.2403 10.6312 5.66654 12.3892L11.995 18.25L18.3235 12.3892C19.7498 10.6312 19.5253 8.13046 17.6779 6.65972C15.8305 5.18899 13.4446 5.60999 11.995 7.23319Z"
-                              clip-rule="evenodd"
-                              ></path>
-                        </svg>
-                        <span class="ml-1 text-neutral-900 dark:text-neutral-200"
-                           >34
-                        </span>
-                     </button>
-                     <a
-                        class="nc-PostCardCommentBtn relative items-center min-w-[68px] rounded-full text-neutral-6000 bg-neutral-50 transition-colors dark:text-neutral-200 dark:bg-neutral-800 hover:bg-teal-50 dark:hover:bg-teal-100 hover:text-teal-600 dark:hover:text-teal-500 hidden sm:flex px-3 h-8 text-xs"
-                        title="Comments"
-                        href="/single/demo-slug#comments"
-                        >
-                        <svg
-                           width="24"
-                           height="24"
-                           fill="none"
-                           viewBox="0 0 24 24"
-                           >
-                           <path
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="1"
-                              d="M4.75 6.75C4.75 5.64543 5.64543 4.75 6.75 4.75H17.25C18.3546 4.75 19.25 5.64543 19.25 6.75V14.25C19.25 15.3546 18.3546 16.25 17.25 16.25H14.625L12 19.25L9.375 16.25H6.75C5.64543 16.25 4.75 15.3546 4.75 14.25V6.75Z"
-                              ></path>
-                           <path
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M9.5 11C9.5 11.2761 9.27614 11.5 9 11.5C8.72386 11.5 8.5 11.2761 8.5 11C8.5 10.7239 8.72386 10.5 9 10.5C9.27614 10.5 9.5 10.7239 9.5 11Z"
-                              ></path>
-                           <path
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M12.5 11C12.5 11.2761 12.2761 11.5 12 11.5C11.7239 11.5 11.5 11.2761 11.5 11C11.5 10.7239 11.7239 10.5 12 10.5C12.2761 10.5 12.5 10.7239 12.5 11Z"
-                              ></path>
-                           <path
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M15.5 11C15.5 11.2761 15.2761 11.5 15 11.5C14.7239 11.5 14.5 11.2761 14.5 11C14.5 10.7239 14.7239 10.5 15 10.5C15.2761 10.5 15.5 10.7239 15.5 11Z"
-                              ></path>
-                        </svg>
-                        <span class="ml-1 text-neutral-900 dark:text-neutral-200"
-                           >110</span
-                           >
-                     </a>
+                     <div
+                     class="nc-PostCardLikeAndComment flex items-center space-x-2 rtl:space-x-reverse relative"
+                   >
+                     
+                       {% if result.result_date %}
+                         
+                       <small class="article-post-date rounded-full"
+                       >{{result.result_date}}
+                     </small>
+                     {% else %}
+                     <small class="article-post-date rounded-full"
+                     >
+                   </small>
+
+                     {% endif %}
+                
+                   </div>
                   </div>
                   <div
                      class="nc-PostCardSaveAction flex items-center space-x-2 text-xs text-neutral-700 dark:text-neutral-300 relative"
                      >
-                     <button
-                        class="nc-NcBookmark relative rounded-full flex items-center justify-center h-8 w-8 bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-700"
-                        title="Save to reading list"
-                        >
-                        <svg
-                           xmlns="http://www.w3.org/2000/svg"
-                           viewBox="0 0 24 24"
-                           stroke-width="1.5"
-                           fill="none"
-                           stroke="currentColor"
-                           class="w-[18px] h-[18px]"
-                           >
-                           <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
-                              ></path>
-                        </svg>
-                     </button>
+                    
                   </div>
                </div>
             </div>

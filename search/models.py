@@ -1,4 +1,7 @@
 from django.db import models
+from django.utils import timezone
+from django.core.validators import MinLengthValidator
+
 
 
 class SearchQuery(models.Model):
@@ -15,12 +18,20 @@ class SearchQuery(models.Model):
 
 
 class ArticlePosts(models.Model):
+    article_tag = models.CharField(max_length=10, validators=[MinLengthValidator(3)], blank=True, null=True, default='')
     article_title = models.CharField(
         max_length=200, blank=False, null=False, default=""
     )
-    article_image = models.ImageField(blank=False, null=False, default='', upload_to='static/images/article_images')
+    article_image = models.ImageField(
+        blank=False, null=False, default="", upload_to="static/images/article_images"
+    )
     article_desc = models.TextField(max_length=500, blank=False, null=False, default="")
     article_link = models.URLField(max_length=500, blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name_plural = 'Article Posts'
 
     def __str__(self):
-        return f"{self.article_title} - {self.article_link}"
+        return self.article_title

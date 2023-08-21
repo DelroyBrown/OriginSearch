@@ -200,7 +200,7 @@ h6 {
 }
 
 a {
-    color: inherit;
+    color: #00B894;
     text-decoration: inherit
 }
 
@@ -2067,6 +2067,34 @@ select {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3
 }
+
+.brand-text-color {
+    color: #00B894;
+}
+
+.article-post-title-bubble {
+    background-color: #00B894;
+    color: #fff;
+}
+
+.article-post-date {
+    /* background-color: #F5F5F5; */
+    padding: 5px 15px 5px 0px;
+    color: #00B894;
+
+}
+
+.article-post-tag {
+    background-color: #000;
+    color: #fff;
+}
+
+.total-results-text {
+    font-weight: 400;
+}
+
+
+
 
 .block {
     display: block
