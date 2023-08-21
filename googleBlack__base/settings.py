@@ -13,7 +13,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = ["origin-search-be95129e1b33.herokuapp.com", "localhost"]
+ALLOWED_HOSTS = ["origin-search-be95129e1b33.herokuapp.com", "127.0.0.1"]
 
 
 INSTALLED_APPS = [
