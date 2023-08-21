@@ -8,11 +8,12 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+# SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = ['https://origin-search-be95129e1b33.herokuapp.com/', 'localhost']
+ALLOWED_HOSTS = ['origin-search-be95129e1b33.herokuapp.com', 'localhost']
 
 
 INSTALLED_APPS = [
