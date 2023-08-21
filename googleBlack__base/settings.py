@@ -8,11 +8,11 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = os.getenv('DEBUG')
+DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://origin-search-be95129e1b33.herokuapp.com/', 'localhost']
 
 
 INSTALLED_APPS = [
@@ -55,18 +55,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "googleBlack__base.wsgi.application"
 
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if "DATABASE_URL" in os.environ:
+    DATABASES = {"default": dj_database_url.parse(os.environ.get("DATABASE_URL"))}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
 
 # DATABASES = {
 #     'default' : dj_database_url.parse('postgres://feghoqoaysuekg:837464445b3c55a92b6fce583f2d736cb29ae424ea6e7215151117507877dd5c@ec2-54-73-22-169.eu-west-1.compute.amazonaws.com:5432/d33clmlidj88rn')
 # }
-
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -95,6 +96,8 @@ USE_TZ = True
 
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
