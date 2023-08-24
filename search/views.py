@@ -6,16 +6,18 @@ from decouple import config
 from django.core.paginator import Paginator, EmptyPage
 from .models import SearchQuery
 from dotenv import load_dotenv
-from .models import ArticlePosts
+from .models import ArticlePosts, Tag
 
 load_dotenv()
 
 
 def index(request):
     article_posts = ArticlePosts.objects.all()
+    tags = Tag.objects.all()
 
     context = {
         "article_posts": article_posts,
+        "tags": tags,
     }
 
     return render(request, "index.html", context)
@@ -178,8 +180,8 @@ def process_search_results(
 def search(request):
     if request.method == "POST":
         # Fetching IP
-        client_ip = get_client_ip_address(request)
-        # client_ip = config("DEVELOPMENT_IP")
+        # client_ip = get_client_ip_address(request)
+        client_ip = config("DEVELOPMENT_IP")
 
         # Fetching location data
         location_data = get_location_data(client_ip)
@@ -214,6 +216,13 @@ def search(request):
         except EmptyPage:
             # If the page number exceeds the available pages, return an empty list
             results_to_show = []
+
+        if 'query' in request.GET:
+            original_search_query = request.GET['query']
+        elif request.method == "POST":
+            original_search_query = request.POST.get("search", "")
+        else:
+            return render(request, "index.html")
 
         context = {
             "final_result": results_to_show,

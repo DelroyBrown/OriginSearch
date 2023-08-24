@@ -59,7 +59,7 @@
                   fill="currentColor"
                 ></path>
               </svg> -->
-           <span class="logo-text">OS</span>
+           <span class="logo-text">O <span style="color: black; margin: 0px 2px;">/</span> S</span>
             </a>
           </div>
           <div class="flex-[2] hidden lg:flex justify-center mx-4">
@@ -125,7 +125,7 @@
             src="/static/images/searchboxbg.png"
           /> -->
           <div class="flex justify-center homepage-title">
-            <h1><span class="brand-text-color">O</span>rigin<span class="brand-text-color">S</span>earch</h1>
+            <h1><span class="brand-text-color">O</span>riginSearch</h1>
             <p>BLACK OWNED SEARCH ENGINE</p>
           </div>
         </div>
@@ -137,7 +137,26 @@
           <header
             class="w-full max-w-3xl mx-auto text-center flex flex-col items-center"
           >
-            <h2 class="text-2xl sm:text-4xl font-semibold">OriginSearch</h2>
+            <div class="homepage-tag-wrapper justify-center flex gap-2">
+              {% for tag in tags %}
+                <a href="/search?query={{ tag.tag_name }}" class="homepage-tags text-sm font-bold">#{{ tag.tag_name }}</a>
+
+              {% endfor %}
+
+          
+              
+              <!-- <p class="homepage-tags text-sm">#Hairdressers</p>
+            <p class="homepage-tags text-sm">#Weddingplanner</p>
+            <p class="homepage-tags text-sm">#Cosmetics</p>
+            <p class="homepage-tags text-sm">#Barbershop</p>
+            <p class="homepage-tags text-sm">#Photography</p>
+            <p class="homepage-tags text-sm">#Tutoring</p>
+            <p class="homepage-tags text-sm">#WebDesign</p>
+            <p class="homepage-tags text-sm">#Restaurants</p>
+            <p class="homepage-tags text-sm">#Accountant</p>
+            <p class="homepage-tags text-sm">#Lawyers</p>
+            <p class="homepage-tags text-sm">#Teacher</p> -->
+            </div>
            
             <form
               class="relative w-full mt-8 sm:mt-11 text-left"

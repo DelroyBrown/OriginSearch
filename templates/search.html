@@ -174,7 +174,7 @@
                      </span>
                   </label>
                </form>
-               <div
+               <!-- <div
                   class="w-full text-sm text-start mt-4 text-neutral-500 dark:text-neutral-300"
                   >
                   <div
@@ -197,7 +197,7 @@
                      href="/search">
                   {{search.query}}
                   </a>
-               </div>
+               </div> -->
          </div>
          </header>
       </div>
@@ -216,11 +216,11 @@
             >
             <ul class="flex sm:space-x-2 rtl:space-x-reverse">
                <li class="nc-NavItem relative flex-shrink-0">
-                  <h2
-                    class="total-results-text flex items-center justify-center px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 rounded-full"
-                  >
-                  {{original_query}}
-               </h2>
+                  <p class="block text-xs sm:text-sm mt-4 text-neutral-500 dark:text-neutral-300">
+                     We found <b>{{total_results_count}}</b> for <b>{{original_query}}</b> 
+
+                  </p>
+              
                 </li>
           
             </ul>

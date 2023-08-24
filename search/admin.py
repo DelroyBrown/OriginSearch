@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import SearchQuery, ArticlePosts
+from .models import SearchQuery, ArticlePosts, Tag
 
 admin.site.register(ArticlePosts)
+admin.site.register(Tag)
 
 
 @admin.register(SearchQuery)

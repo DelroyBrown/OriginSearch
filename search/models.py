@@ -18,7 +18,7 @@ class SearchQuery(models.Model):
 
 class ArticlePosts(models.Model):
     article_tag = models.CharField(
-        max_length=10,
+        max_length=12,
         validators=[MinLengthValidator(3)],
         blank=True,
         null=True,
@@ -27,7 +27,7 @@ class ArticlePosts(models.Model):
     article_title = models.CharField(
         max_length=200, blank=False, null=False, default=""
     )
-    article_image = models.ImageField(blank=False, null=False, default="")
+    article_image = models.ImageField(blank=False, null=False, upload_to='images/article_images', default="")
     article_desc = models.TextField(max_length=500, blank=False, null=False, default="")
     article_link = models.URLField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
@@ -38,3 +38,10 @@ class ArticlePosts(models.Model):
 
     def __str__(self):
         return self.article_title
+
+
+class Tag(models.Model):
+    tag_name = models.CharField(max_length=20, blank=False, null=False, default='')
+
+    def __str__(self):
+        return self.tag_name
