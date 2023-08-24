@@ -180,8 +180,8 @@ def process_search_results(
 def search(request):
     if request.method == "POST":
         # Fetching IP
-        # client_ip = get_client_ip_address(request)
-        client_ip = config("DEVELOPMENT_IP")
+        client_ip = get_client_ip_address(request)
+        # client_ip = config("DEVELOPMENT_IP")
 
         # Fetching location data
         location_data = get_location_data(client_ip)
